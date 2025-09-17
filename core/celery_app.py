@@ -4,11 +4,23 @@ Celery configuration for background task processing
 from celery import Celery
 from core.config import settings
 import os
+import redis
 
 # Redis configuration
-REDIS_URL = os.getenv("REDIS_URL", "redis://default:email@redis-17402.c84.us-east-1-2.ec2.redns.redis-cloud.com:17402/0")
+REDIS_URL = os.getenv(
+    "REDIS_URL",
+    "redis://default:email@redis-17402.c84.us-east-1-2.ec2.redns.redis-cloud.com:17402/0"
+)
 
-# Create Celery app
+# ✅ Setup Redis Connection Pool (Limits total open connections)
+# This prevents creating too many Redis connections (which hits max_clients)
+redis_pool = redis.ConnectionPool.from_url(
+    REDIS_URL,
+    max_connections=10,  # Limit max connections to Redis (adjust as needed)
+    decode_responses=True
+)
+
+# ✅ Create Celery app
 celery_app = Celery(
     "invoice_processor",
     broker=REDIS_URL,
@@ -16,7 +28,7 @@ celery_app = Celery(
     include=["tasks.email_scanning_tasks"]
 )
 
-# Celery configuration
+# ✅ Celery configuration
 celery_app.conf.update(
     # Serialization
     task_serializer="json",
@@ -24,7 +36,7 @@ celery_app.conf.update(
     result_serializer="json",
     timezone="UTC",
     enable_utc=True,
-    
+
     # Task configuration
     task_track_started=True,
     task_time_limit=30 * 60,  # 30 minutes max
@@ -32,19 +44,19 @@ celery_app.conf.update(
     task_acks_late=True,
     worker_prefetch_multiplier=1,
     worker_max_tasks_per_child=50,
-    
-    # Concurrency control
-    worker_concurrency=4,  # Max 4 concurrent workers per instance
-    
+
+    # ✅ Lower concurrency to avoid too many open Redis connections
+    worker_concurrency=int(os.getenv("CELERY_CONCURRENCY", 2)),
+
     # Task routing
     task_routes={
         "tasks.email_scanning_tasks.*": {"queue": "email_scanning"},
     },
     task_default_queue="email_scanning",
-    
+
     # Result backend settings
     result_expires=3600,  # Results expire after 1 hour
-    
+
     # Beat schedule (for periodic tasks)
     beat_schedule={
         'cleanup-old-tasks': {
