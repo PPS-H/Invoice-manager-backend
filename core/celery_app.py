@@ -6,7 +6,7 @@ from core.config import settings
 import os
 
 # Redis configuration
-REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")
+REDIS_URL = os.getenv("REDIS_URL", "redis://default:email@redis-17402.c84.us-east-1-2.ec2.redns.redis-cloud.com:17402/0")
 
 # Create Celery app
 celery_app = Celery(
