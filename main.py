@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from core import config  # Load environment variables
 from core.database import connect_to_mongo, close_mongo_connection
-from routes import auth, invoices, email_accounts, dashboard, groups, invites, email_filters, vendors, admin, stripe
+from routes import auth, invoices, email_accounts, dashboard, groups, invites, email_filters, vendors, admin, stripe, checkout, webhooks, subscriptions
 
 app = FastAPI(title="Invoice SaaS Backend", version="1.0.0")
 
@@ -42,6 +42,9 @@ app.include_router(email_filters.router, prefix="/api")
 app.include_router(vendors.router, prefix="/api")
 app.include_router(admin.router, prefix="/api")
 app.include_router(stripe.router, prefix="/api")
+app.include_router(checkout.router, prefix="/api")
+app.include_router(webhooks.router, prefix="/api")
+app.include_router(subscriptions.router, prefix="/api")
 
 @app.get("/")
 async def root():

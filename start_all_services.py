@@ -8,6 +8,7 @@ import time
 import os
 from pathlib import Path
 
+
 def start_service(name, command, background=True):
     """Start a service with the given command"""
     try:

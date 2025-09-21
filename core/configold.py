@@ -7,9 +7,6 @@ class Settings:
     MONGODB_URI: str = os.getenv("MONGODB_URI", "mongodb://localhost:27017")
     MONGODB_DB: str = os.getenv("MONGODB_DB", "invoice")
     
-    # Frontend Configuration
-    FRONTEND_URL: str = os.getenv("FRONTEND_URL", "http://localhost:5173")
-    
     # Google OAuth Configuration
     # To get these values:
     # 1. Go to https://console.cloud.google.com/
@@ -33,6 +30,8 @@ class Settings:
     # Stripe Configuration
     STRIPE_SECRET_KEY: str = os.getenv("STRIPE_SECRET_KEY", "")
     STRIPE_PUBLISHABLE_KEY: str = os.getenv("STRIPE_PUBLISHABLE_KEY", "")
+    STRIPE_WEBHOOK_SECRET: str = os.getenv("STRIPE_WEBHOOK_SECRET", "")
+    DOMAIN: str = os.getenv("DOMAIN", "http://localhost:5173")
 
     def __post_init__(self):
         if not self.GOOGLE_CLIENT_SECRET:

@@ -23,7 +23,6 @@ router = APIRouter()
 GOOGLE_CLIENT_ID = settings.GOOGLE_CLIENT_ID
 GOOGLE_CLIENT_SECRET = settings.GOOGLE_CLIENT_SECRET
 GOOGLE_REDIRECT_URI = settings.GOOGLE_REDIRECT_URI
-GOOGLE_REDIRECT_URI = settings.GOOGLE_REDIRECT_URI
 
 @router.get("/google/login", response_model=GoogleAuthUrlResponse)
 async def google_login():
@@ -171,7 +170,7 @@ async def google_callback(code: str, state: str = None):
         )
         
         # Redirect to frontend with success
-        frontend_redirect = f"{GOOGLE_REDIRECT_URI}?code={code}"
+        frontend_redirect = f"http://localhost:5173/auth/callback?code={code}"
         return RedirectResponse(url=frontend_redirect)
         
     except HTTPException:
@@ -179,7 +178,7 @@ async def google_callback(code: str, state: str = None):
     except Exception as e:
         print(f"Callback error: {str(e)}")
         # Redirect to frontend with error
-        frontend_redirect = f"{GOOGLE_REDIRECT_URI}?error=authentication_failed"
+        frontend_redirect = f"http://localhost:5173/auth/callback?error=authentication_failed"
         return RedirectResponse(url=frontend_redirect)
 
 @router.post("/google/exchange", response_model=AuthResponse)

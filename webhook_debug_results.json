@@ -1,0 +1,49 @@
+{
+  "timestamp": "2025-09-21T11:28:03.396558",
+  "environment": {
+    "stripe_secret_key": true,
+    "stripe_webhook_secret": true,
+    "stripe_publishable_key": true,
+    "mongodb_uri": true,
+    "mongodb_db": true,
+    "domain": true
+  },
+  "database": {
+    "connection": true,
+    "ping": true,
+    "collections": [
+      "vendors",
+      "sync_progress",
+      "users",
+      "scanning_tasks",
+      "user_vendor_preferences",
+      "email_accounts",
+      "invites",
+      "invoices",
+      "scan_progress",
+      "subscriptions"
+    ],
+    "subscription_count": 0,
+    "user_count": 2
+  },
+  "stripe": {
+    "api_connection": true,
+    "webhook_secret": true,
+    "signature_creation": true
+  },
+  "subscription_service": {
+    "create_subscription": true,
+    "created_subscription_id": "68cfe144b97fe14f7ae33f2b",
+    "get_subscription": true,
+    "retrieved_subscription_id": "68cfe144b97fe14f7ae33f2b",
+    "update_customer_id": false,
+    "cancel_subscription": true
+  },
+  "webhook_processing": {
+    "extract_user_id_checkout": true,
+    "extract_user_id_subscription": true,
+    "webhook_subscription_creation": true,
+    "created_subscription_id": "68cfe145b97fe14f7ae33f2c"
+  },
+  "overall_status": "PASS"
+}

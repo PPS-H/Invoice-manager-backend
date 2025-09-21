@@ -6,7 +6,6 @@ import logging
 from bson import ObjectId
 from core.database import mongodb
 from core.jwt import get_current_user
-from core.config import settings
 from models.user import UserModel
 from models.invite import InviteModel
 from schemas.invite import (
@@ -64,7 +63,7 @@ async def create_invite(
         invite.id = str(result.inserted_id)
         
         # Generate invite URL
-        invite_url = f"{settings.FRONTEND_URL}/invite/{invite_token}"
+        invite_url = f"http://localhost:5173/invite/{invite_token}"
         
         return CreateInviteResponse(
             success=True,
@@ -144,7 +143,7 @@ async def create_email_account_invite(
             # Continue even if email fails - the invite URL is still generated
         
         # Generate invite URL (fallback)
-        invite_url = f"{settings.FRONTEND_URL}/invite/add-email/{invite_token}"
+        invite_url = f"http://localhost:5173/invite/add-email/{invite_token}"
         
         return CreateInviteResponse(
             success=True,

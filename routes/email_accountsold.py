@@ -25,8 +25,6 @@ logger = logging.getLogger(__name__)
 # Google OAuth2 settings
 GOOGLE_CLIENT_ID = settings.GOOGLE_CLIENT_ID
 GOOGLE_CLIENT_SECRET = settings.GOOGLE_CLIENT_SECRET
-FRONTEND_URL = settings.FRONTEND_URL
-GOOGLE_REDIRECT_URI=settings.GOOGLE_REDIRECT_URI
 from bson import ObjectId
 import os
 import requests
@@ -84,7 +82,7 @@ async def debug_oauth_config():
     return {
         "client_id": GOOGLE_CLIENT_ID,
         "client_secret_set": bool(GOOGLE_CLIENT_SECRET),
-        "redirect_uri": f"{FRONTEND_URL}/email-accounts/callback",
+        "redirect_uri": "http://localhost:5173/email-accounts/callback",
         "token_url": "https://oauth2.googleapis.com/token",
         "auth_url": "https://accounts.google.com/o/oauth2/v2/auth"
     }
@@ -99,7 +97,7 @@ async def get_oauth_url_public(provider: str):
         auth_url = "https://accounts.google.com/o/oauth2/v2/auth"
         params = {
             "client_id": GOOGLE_CLIENT_ID,
-            "redirect_uri": f"{GOOGLE_REDIRECT_URI}",  # Use the same redirect URI as main auth
+            "redirect_uri": "http://localhost:5173/auth/callback",  # Use the same redirect URI as main auth
             "response_type": "code",
             "scope": "https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile",
             "access_type": "offline",
@@ -124,7 +122,7 @@ async def get_oauth_url(provider: str):
         auth_url = "https://accounts.google.com/o/oauth2/v2/auth"
         params = {
             "client_id": GOOGLE_CLIENT_ID,
-            "redirect_uri": f"{FRONTEND_URL}/email-accounts/callback",
+            "redirect_uri": "http://localhost:5173/email-accounts/callback",
             "response_type": "code",
             "scope": "https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile",
             "access_type": "offline",
@@ -172,7 +170,7 @@ async def oauth_callback_public(
                 "client_secret": GOOGLE_CLIENT_SECRET,
                 "code": code,
                 "grant_type": "authorization_code",
-                "redirect_uri": f"{GOOGLE_REDIRECT_URI}"  # Use the same redirect URI as main auth
+                "redirect_uri": "http://localhost:5173/auth/callback"  # Use the same redirect URI as main auth
             }
             
             print(f"   Exchanging code for tokens...")
@@ -422,7 +420,7 @@ async def oauth_callback(
                 "client_secret": GOOGLE_CLIENT_SECRET,
                 "code": code,
                 "grant_type": "authorization_code",
-                "redirect_uri": f"{FRONTEND_URL}/email-accounts/callback"
+                "redirect_uri": "http://localhost:5173/email-accounts/callback"
             }
             
             print(f"Exchanging code for tokens...")

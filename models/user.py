@@ -17,6 +17,7 @@ class UserModel(BaseModel):
     name: str
     picture: Optional[str] = None
     linked_accounts: List[LinkedEmailAccount] = []
+    stripe_customer_id: Optional[str] = None
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
 
