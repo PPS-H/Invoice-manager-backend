@@ -26,6 +26,10 @@ class Settings:
     
     # Gemini AI Configuration
     GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
+    
+    # Stripe Configuration
+    STRIPE_SECRET_KEY: str = os.getenv("STRIPE_SECRET_KEY", "")
+    STRIPE_PUBLISHABLE_KEY: str = os.getenv("STRIPE_PUBLISHABLE_KEY", "")
 
     def __post_init__(self):
         if not self.GOOGLE_CLIENT_SECRET:
@@ -48,4 +52,13 @@ if not settings.GEMINI_API_KEY:
     print("   Please set GEMINI_API_KEY environment variable in .env file")
     print("   Get your API key from: https://aistudio.google.com/app/apikey")
 else:
-    print(f"✅ Gemini API key configured (ends with: ...{settings.GEMINI_API_KEY[-10:]})") 
+    print(f"✅ Gemini API key configured (ends with: ...{settings.GEMINI_API_KEY[-10:]})")
+
+# Check for missing Stripe configuration
+if not settings.STRIPE_SECRET_KEY:
+    print("⚠️  WARNING: Stripe secret key is not configured!")
+    print("   Payment processing will not work without STRIPE_SECRET_KEY")
+    print("   Please set STRIPE_SECRET_KEY environment variable in .env file")
+    print("   Get your API key from: https://dashboard.stripe.com/apikeys")
+else:
+    print(f"✅ Stripe secret key configured (ends with: ...{settings.STRIPE_SECRET_KEY[-10:]})") 
